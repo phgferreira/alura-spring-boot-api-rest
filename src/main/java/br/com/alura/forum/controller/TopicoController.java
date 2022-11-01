@@ -3,6 +3,8 @@ package br.com.alura.forum.controller;
 import br.com.alura.forum.controller.dto.TopicoDto;
 import br.com.alura.forum.model.Curso;
 import br.com.alura.forum.model.Topico;
+import br.com.alura.forum.repository.TopicoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +19,12 @@ import java.util.List;
 @RequestMapping("topico")
 public class TopicoController {
 
+    @Autowired
+    private TopicoRepository topicoRepository;
+
     @GetMapping("lista-todos")
     public List<TopicoDto> listAll() {
-        Topico topico = new Topico("Dúvida", "Dúvida com Spring", new Curso("Spring", "Programação"));
-        return TopicoDto.convertList( Arrays.asList(topico, topico, topico) );
+        List<Topico> topicos = topicoRepository.findAll();
+        return TopicoDto.convertList( topicos );
     }
 }
