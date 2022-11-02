@@ -27,4 +27,16 @@ public class TopicoController {
         List<Topico> topicos = topicoRepository.findAll();
         return TopicoDto.convertList( topicos );
     }
+
+    @GetMapping("lista-titulo")
+    public List<TopicoDto> listByTitulo(String titulo) {
+        List<Topico> topicos = topicoRepository.findByTitulo(titulo);
+        return TopicoDto.convertList( topicos );
+    }
+
+    @GetMapping("lista-curso-nome")
+    public List<TopicoDto> listByCursoNome(String cursoNome) {
+        List<Topico> topicos = topicoRepository.findByCurso_Nome(cursoNome);
+        return TopicoDto.convertList( topicos );
+    }
 }
