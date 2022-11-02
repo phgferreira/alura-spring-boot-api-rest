@@ -20,6 +20,7 @@ public class TopicoDtoDetalhe {
     public TopicoDtoDetalhe(Topico topico) {
         this.id = topico.getId();
         this.titulo = topico.getTitulo();
+        this.mensagem = topico.getMensagem();
         this.dataCriacao = topico.getDataCriacao();
         this.autorNome = (topico.getAutor() != null ? topico.getAutor().getNome() : null);
         this.status = topico.getStatus();
