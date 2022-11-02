@@ -62,7 +62,7 @@ public class TopicoController {
 
     @GetMapping("{id}")
     public TopicoDtoDetalhe findById(@PathVariable Long id) {
-        Topico topico = topicoRepository.findById(id).get();
+        Topico topico = topicoRepository.getReferenceById(id);
         return new TopicoDtoDetalhe( topico );
     }
 
