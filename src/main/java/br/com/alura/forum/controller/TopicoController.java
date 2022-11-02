@@ -45,10 +45,22 @@ public class TopicoController {
         return ResponseEntity.created( uri ).body( new TopicoDto( topico ) );
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<TopicoDtoDetalhe> findById(@PathVariable Long id) {
+        Optional<Topico> topicoOpcional = topicoRepository.findById(id);
+        if(!topicoOpcional.isPresent())
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok( new TopicoDtoDetalhe( topicoOpcional.get() ) );
+    }
+
     @PutMapping("{id}")
     @Transactional
     // O Transactional é para comitar a atualização no final do método
     public ResponseEntity<TopicoDto> update(@PathVariable Long id, @RequestBody @Valid UpdateTopicoForm topicoForm) {
+        Optional<Topico> topicoOpcional = topicoRepository.findById(id);
+        if(!topicoOpcional.isPresent())
+            return ResponseEntity.notFound().build();
+
         Topico topico = topicoForm.update(id, topicoRepository);
 
         return ResponseEntity.ok( new TopicoDto( topico ) );
@@ -57,6 +69,10 @@ public class TopicoController {
     @DeleteMapping("{id}")
     @Transactional
     public ResponseEntity delete(@PathVariable Long id) {
+        Optional<Topico> topicoOpcional = topicoRepository.findById(id);
+        if(!topicoOpcional.isPresent())
+            return ResponseEntity.notFound().build();
+
         topicoRepository.deleteById(id);
 
         return ResponseEntity.ok().build();
@@ -79,12 +95,6 @@ public class TopicoController {
     public List<TopicoDto> listByCursoNome(String cursoNome) {
         List<Topico> topicos = topicoRepository.findByCurso_Nome(cursoNome);
         return TopicoDto.convertList( topicos );
-    }
-
-    @GetMapping("{id}")
-    public TopicoDtoDetalhe findById(@PathVariable Long id) {
-        Topico topico = topicoRepository.getReferenceById(id);
-        return new TopicoDtoDetalhe( topico );
     }
 
 }
