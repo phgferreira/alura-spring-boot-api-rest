@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -28,7 +29,9 @@ public class TopicoController {
 
     @PostMapping
     // @RequestBody significa que os dados do TopicoForm virão pelo corpo da requisição
-    public ResponseEntity<TopicoDto> insert(@RequestBody TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
+    // O ResponseEntity<TopicoDto> é para retornar um objeto TopicoDto dentro do corpo da respota
+    // Caso não queira intervir no retorno de erro não precisa usar o BindingResult como parâmetro, o próprio Spring retorna 400 Bad Request
+    public ResponseEntity<TopicoDto> insert(@RequestBody @Valid TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
         Topico topico = topicoForm.convert( cursoRepository );
         topicoRepository.save( topico );
 
