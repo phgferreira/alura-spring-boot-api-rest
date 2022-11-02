@@ -1,6 +1,7 @@
 package br.com.alura.forum.controller;
 
 import br.com.alura.forum.controller.dto.TopicoDto;
+import br.com.alura.forum.controller.dto.TopicoDtoDetalhe;
 import br.com.alura.forum.controller.form.TopicoForm;
 import br.com.alura.forum.model.Curso;
 import br.com.alura.forum.model.Topico;
@@ -16,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 // O @RestController já diz que todos os métodos vão retonar @ResponseBody
 @RestController
@@ -56,6 +58,12 @@ public class TopicoController {
     public List<TopicoDto> listByCursoNome(String cursoNome) {
         List<Topico> topicos = topicoRepository.findByCurso_Nome(cursoNome);
         return TopicoDto.convertList( topicos );
+    }
+
+    @GetMapping("{id}")
+    public TopicoDtoDetalhe findById(@PathVariable Long id) {
+        Topico topico = topicoRepository.findById(id).get();
+        return new TopicoDtoDetalhe( topico );
     }
 
 }
