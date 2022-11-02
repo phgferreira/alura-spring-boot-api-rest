@@ -3,6 +3,7 @@ package br.com.alura.forum.controller;
 import br.com.alura.forum.controller.dto.TopicoDto;
 import br.com.alura.forum.controller.dto.TopicoDtoDetalhe;
 import br.com.alura.forum.controller.form.TopicoForm;
+import br.com.alura.forum.controller.form.UpdateTopicoForm;
 import br.com.alura.forum.model.Curso;
 import br.com.alura.forum.model.Topico;
 import br.com.alura.forum.repository.CursoRepository;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -40,6 +42,15 @@ public class TopicoController {
 
         URI uri = uriBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created( uri ).body( new TopicoDto( topico ) );
+    }
+
+    @PutMapping("{id}")
+    @Transactional
+    // O Transactional é para comitar a atualização no final do método
+    public ResponseEntity<TopicoDto> update(@PathVariable Long id, @RequestBody @Valid UpdateTopicoForm topicoForm) {
+        Topico topico = topicoForm.update(id, topicoRepository);
+
+        return ResponseEntity.ok( new TopicoDto( topico ) );
     }
 
     @GetMapping("lista-todos")
