@@ -33,6 +33,7 @@ public class TopicoController {
     private CursoRepository cursoRepository;
 
     @PostMapping
+    @Transactional
     // @RequestBody significa que os dados do TopicoForm virão pelo corpo da requisição
     // O ResponseEntity<TopicoDto> é para retornar um objeto TopicoDto dentro do corpo da respota
     // Caso não queira intervir no retorno de erro não precisa usar o BindingResult como parâmetro, o próprio Spring retorna 400 Bad Request
@@ -52,6 +53,15 @@ public class TopicoController {
 
         return ResponseEntity.ok( new TopicoDto( topico ) );
     }
+
+    @DeleteMapping("{id}")
+    @Transactional
+    public ResponseEntity delete(@PathVariable Long id) {
+        topicoRepository.deleteById(id);
+
+        return ResponseEntity.ok().build();
+    }
+
 
     @GetMapping("lista-todos")
     public List<TopicoDto> listAll() {
