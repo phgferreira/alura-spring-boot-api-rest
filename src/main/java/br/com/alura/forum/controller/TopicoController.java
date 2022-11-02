@@ -7,9 +7,12 @@ import br.com.alura.forum.model.Topico;
 import br.com.alura.forum.repository.CursoRepository;
 import br.com.alura.forum.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 // O @RestController já diz que todos os métodos vão retonar @ResponseBody
@@ -25,8 +28,12 @@ public class TopicoController {
 
     @PostMapping
     // @RequestBody significa que os dados do TopicoForm virão pelo corpo da requisição
-    public void insert(@RequestBody TopicoForm topicoForm) {
-        topicoRepository.save( topicoForm.convert( cursoRepository ) );
+    public ResponseEntity<TopicoDto> insert(@RequestBody TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
+        Topico topico = topicoForm.convert( cursoRepository );
+        topicoRepository.save( topico );
+
+        URI uri = uriBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
+        return ResponseEntity.created( uri ).body( new TopicoDto( topico ) );
     }
 
     @GetMapping("lista-todos")
